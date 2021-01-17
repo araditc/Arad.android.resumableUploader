@@ -1,5 +1,4 @@
 # Arad.android.resumableUploader
-=======
 
 A power full resumable upload library for Android
 
@@ -35,12 +34,12 @@ Simple use cases will look something like this:
             }
 
             @Override
-            public void onUploadProgress(int i, int i1, int i2, int i3, int i4) {
+            public void onUploadProgress(int index, int fileId, int total, int value, int percent) {
 
             }
 
             @Override
-            public void onErrorUploadProgress(int i, int i1, int i2, int i3, int i4) {
+            public void onErrorUploadProgress(int index, int fileId, int total, int value, int percent) {
 
             }
 
