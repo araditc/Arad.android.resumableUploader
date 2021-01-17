@@ -1,0 +1,52 @@
+plugins {
+    id 'com.android.library'
+    id 'realm-android'
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        buildConfigField "String", "DB_NAME", "\"arad_uploader_db.realm\""
+        buildConfigField "int", "SCHEMA_VERSION", String.valueOf(1)
+
+        buildConfigField "String", "BASE_URL", "\"https://api.codeziba.ir/v1/\""
+        buildConfigField "String", "BASE_DOWNLOAD_URL", "\"https://dl.codeziba.ir\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //Web Service
+    def retrofit_version = "2.7.1"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.google.code.gson:gson:2.8.6"
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+    implementation "androidx.work:work-runtime:2.4.0"
+
+}
