@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upload_model_error_prepare_intent">Error preparing file!</string>
+    <string name="fg_notitifcation_title_starting">Uploading file…</string>
+</resources>

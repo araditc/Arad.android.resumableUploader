@@ -1,0 +1,3 @@
+include ':app'
+include ':uploader'
+rootProject.name = "Arad upload"
