@@ -2,7 +2,7 @@
 
 A power full resumable upload library for Android
 
-![](https://i.ibb.co/dfxFr9T/cloud-computing.png)
+![](https://i.ibb.co/3mFZdMH/Webp-net-resizeimage-6.png)
 
 Download
 --------
@@ -17,7 +17,7 @@ dependencies {
 }
 ```
 
-How do I use Arad Push notification?
+How do I use Arad Arad uploader?
 -------------------
 
 Simple use cases will look something like this:
