@@ -5,8 +5,8 @@ import com.araditc.uploader.BuildConfig;
 
 public class Phrase {
     //    END POINTS
-    public static final String BASE_URL = BuildConfig.BASE_URL;
-    public static final String BASE_DOWNLOAD_URL = BuildConfig.BASE_DOWNLOAD_URL;
+    public static String BASE_URL = BuildConfig.BASE_URL;
+    public static String BASE_DOWNLOAD_URL = BuildConfig.BASE_DOWNLOAD_URL;
 
     public static final String MEDIA_IMAGE_END_POINT = "media/image";
     public static final String MEDIA_AUDIO_END_POINT = "media/audio";
