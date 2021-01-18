@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-	        implementation 'com.github.araditc:Arad.android.resumableUploader:Tag'
+	        implementation 'com.github.araditc:Arad.android.resumableUploader:1.0.1'
 }
 ```
 
@@ -25,6 +25,8 @@ Simple use cases will look something like this:
 ```java
 
 // initialize before use:
+        AppConfig.start(applicationContext);
+
      AradUploader.newInstance().setBaseUrl(BASE_URL);
      AradUploader.newInstance().setDownloadBaseUrl(BASE_DOWNLOAD_URL);
 	
