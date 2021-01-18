@@ -23,7 +23,12 @@ How do I use Arad Arad uploader?
 Simple use cases will look something like this:
 
 ```java
-// For a simple view:
+
+// initialize before use:
+     AradUploader.newInstance().setBaseUrl(BASE_URL);
+     AradUploader.newInstance().setDownloadBaseUrl(BASE_DOWNLOAD_URL);
+	
+	
         AradUploader.newInstance().upload(token, filePath, type, uploadId);
 
 
