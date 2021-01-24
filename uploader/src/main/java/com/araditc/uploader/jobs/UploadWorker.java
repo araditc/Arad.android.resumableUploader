@@ -228,8 +228,8 @@ public class UploadWorker extends Worker {
             }
 
         } catch (IOException ignored) {
-//            uploadHistoryModel.updateUploadHistory(getInputData().getInt(FILE_ID, -1) + ""
-//                    , UploadHistoryTypes.NOT_COMPLETED, null);
+            uploadHistoryModel.updateUploadHistory(getInputData().getInt(FILE_ID, -1) + ""
+                    , UploadHistoryTypes.NOT_COMPLETED, null);
             broadCastFailResult("");
 
             return Result.failure();
@@ -299,7 +299,7 @@ public class UploadWorker extends Worker {
                     interruptedChunkList.add(k);
                 } else {
                     increaseProgressValue();
-                    returnProgress(-1, totalSize, getProgressValue(), (int) (((float) getProgressValue() / (float) totalSize) * 100f));
+                    returnProgress(k, totalSize, getProgressValue(), (int) (((float) getProgressValue() / (float) totalSize) * 100f));
                 }
             }
 
@@ -363,7 +363,7 @@ public class UploadWorker extends Worker {
         return md5;
     }
 
-    public interface UploadResult {
+    public static interface UploadResult {
         void onUploadComplete(int fileId, MediaResponse mediaResponse);
 
         void onUploadProgress(int index, int fileId, int total, int value, int percent);

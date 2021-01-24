@@ -19,6 +19,7 @@ public class AppConfig {
 
     public static synchronized void start(Application application) {
         AppConfig.application = application;
+        configRealm();
     }
 
     public static synchronized AppConfig newInstance() {
@@ -28,30 +29,20 @@ public class AppConfig {
     }
 
     private AppConfig() {
-//        configRealm();
         applicationHandler = new Handler(application.getMainLooper());
     }
 
-    private void configRealm() {
+    private static void configRealm() {
         Realm.init(application);
 
         RealmConfiguration farmAnimalsConfig = new RealmConfiguration.Builder()
                 .name(BuildConfig.DB_NAME)
                 .schemaVersion(BuildConfig.SCHEMA_VERSION)
                 .modules(Realm.getDefaultModule(), new UploadModule())
+                .allowWritesOnUiThread(true)
                 .build();
 
         farmRealm = Realm.getInstance(farmAnimalsConfig);
-
-//        Realm.init(application);
-//        RealmConfiguration config = new RealmConfiguration.Builder()
-//                .name(BuildConfig.DB_NAME)
-//                .schemaVersion(BuildConfig.SCHEMA_VERSION)
-//                .addModule(new uploader())
-//                .deleteRealmIfMigrationNeeded()
-//                .build();
-//
-//        Realm.setDefaultConfiguration(config);
     }
 
     public void configRealm(Context context) {
@@ -61,6 +52,7 @@ public class AppConfig {
                 .name(BuildConfig.DB_NAME)
                 .schemaVersion(BuildConfig.SCHEMA_VERSION)
                 .modules(Realm.getDefaultModule(), new UploadModule())
+                .allowWritesOnUiThread(true)
                 .build();
 
         farmRealm = Realm.getInstance(farmAnimalsConfig);

@@ -35,13 +35,14 @@ public class UploadService extends IntentService {
     private int uploadId;
     private WorkManager workManager;
     private Data.Builder builder;
-        private UploadHistoryModel uploadHistoryModel;
+    private UploadHistoryModel uploadHistoryModel;
     private static UploadWorker.UploadResult progressUploadListener;
     private Intent intent;
     private NotificationCompat.Builder notificationBuilder;
     UploadWorker.UploadResult uploadListener;
 
     NotificationManager notificationManager;
+    private int[] failedChunk;
 
     public UploadService() {
         super("upload_manager");
@@ -56,6 +57,7 @@ public class UploadService extends IntentService {
     public static final String UPLOAD_ID_KEY = "upload_id";
     public static final String FILE_PATH_KEY = "file_path";
     public static final String TYPE_KEY = "type";
+    public static final String FAILED_CHUNK_KEY = "fail_chunk_sequence_number";
 
     @Override
     public void onCreate() {
@@ -106,20 +108,21 @@ public class UploadService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.intent = intent;
-//
+
         uploadHistoryModel = new UploadHistoryModel(ApiClient.GetClient(intent.getStringExtra(TOKEN_KEY))
                 , new UploadHistoryDAO());
 
         uploadId = intent.getIntExtra(UPLOAD_ID_KEY, -1);
         filePath = intent.getStringExtra(FILE_PATH_KEY);
         type = intent.getIntExtra(TYPE_KEY, -1);
+        failedChunk = intent.getIntArrayExtra(FAILED_CHUNK_KEY);
 
         uploadHistoryModel.saveUploadHistory(uploadId + "",
                 0,
                 UploadHistoryTypes.IN_PROGRESS,
                 null);
 
-        prepareChunkUpload(startId, uploadId,intent.getStringExtra(TOKEN_KEY));
+        prepareChunkUpload(startId, failedChunk, uploadId, intent.getStringExtra(TOKEN_KEY));
 
         return START_STICKY;
     }
@@ -136,7 +139,7 @@ public class UploadService extends IntentService {
 
     }
 
-    public void prepareChunkUpload(int startId, int uploadId, String token) {
+    public void prepareChunkUpload(int startId, int[] failedChunk, int uploadId, String token) {
         if (workManager == null || filePath == null || filePath.equals("")) return;
 
 
@@ -144,6 +147,9 @@ public class UploadService extends IntentService {
         builder.putString(UploadWorker.FILE_PATH, filePath);
         builder.putInt(UploadWorker.FILE_TYPE, type);
         builder.putInt(UploadWorker.FILE_ID, uploadId);
+
+        if (failedChunk != null)
+            builder.putIntArray(UploadWorker.FAIL_CHUNK_ARRAY, failedChunk);
 
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(UploadWorker.class)

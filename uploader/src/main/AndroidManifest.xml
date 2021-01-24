@@ -5,4 +5,5 @@
     <application>
         <service android:name=".service.UploadService" />
     </application>
+
 </manifest>

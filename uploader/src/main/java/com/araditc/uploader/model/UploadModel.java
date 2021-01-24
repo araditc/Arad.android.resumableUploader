@@ -189,11 +189,13 @@ public class UploadModel implements UploadContract.Model {
         rAvatar = MultipartBody.Part.createFormData("file", imageName + "." + format, requestFile);
 
         try {
-            return apiInterface.upload(Phrase.CHUNK_UPLOADER_END_POINT,
+            Response<ResponseBody> execute = apiInterface.upload(Phrase.CHUNK_UPLOADER_END_POINT,
                     rAvatar,
                     rFilePart,
                     rFileId,
                     rTotalPart).execute();
+
+            return execute;
         } catch (IOException e) {
             return null;
         }
