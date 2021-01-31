@@ -25,6 +25,8 @@ import com.araditc.uploader.notificaiton.NotificationBuilder;
 import com.araditc.uploader.struct.UploadHistoryStruct;
 import com.araditc.uploader.struct.responseStruct.MediaResponse;
 
+import java.util.UUID;
+
 import static androidx.work.WorkInfo.State.FAILED;
 import static androidx.work.WorkInfo.State.RUNNING;
 import static androidx.work.WorkInfo.State.SUCCEEDED;
@@ -68,10 +70,17 @@ public class UploadService extends IntentService {
 
         notificationManager = (NotificationManager) AppConfig.newInstance().application.getSystemService(Context.NOTIFICATION_SERVICE);
 
-
         workManager = WorkManager.getInstance(this);
         builder = new Data.Builder();
+
         uploadListener = new UploadWorker.UploadResult() {
+
+
+            @Override
+            public void onUploadStart(int uploadId, UUID cancelUploadId) {
+
+            }
+
             @Override
             public void onUploadComplete(int fileId, MediaResponse mediaResponse) {
                 notificationBuilder.setContentTitle("upload completed!");
@@ -122,7 +131,8 @@ public class UploadService extends IntentService {
                 UploadHistoryTypes.IN_PROGRESS,
                 null);
 
-        prepareChunkUpload(startId, failedChunk, uploadId, intent.getStringExtra(TOKEN_KEY));
+        UUID cancelUploadId = prepareChunkUpload(startId, failedChunk, uploadId, intent.getStringExtra(TOKEN_KEY));
+        progressUploadListener.onUploadStart(uploadId,cancelUploadId);
 
         return START_STICKY;
     }
@@ -139,8 +149,8 @@ public class UploadService extends IntentService {
 
     }
 
-    public void prepareChunkUpload(int startId, int[] failedChunk, int uploadId, String token) {
-        if (workManager == null || filePath == null || filePath.equals("")) return;
+    public UUID prepareChunkUpload(int startId, int[] failedChunk, int uploadId, String token) {
+        if (workManager == null || filePath == null || filePath.equals("")) return null;
 
 
         builder.putString(TOKEN_KEY, token);
@@ -212,6 +222,8 @@ public class UploadService extends IntentService {
 
             }
         });
+
+        return uploadWorkRequest.getId();
     }
 
     private boolean isUploadShouldStop() {

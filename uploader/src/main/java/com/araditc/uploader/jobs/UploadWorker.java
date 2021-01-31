@@ -30,6 +30,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -159,6 +160,11 @@ public class UploadWorker extends Worker {
 
             if (response != null && response.isSuccessful()) {
                 UploadResult listener = new UploadResult() {
+                    @Override
+                    public void onUploadStart(int uploadId, UUID cancelUploadId) {
+
+                    }
+
                     @Override
                     public void onUploadComplete(int fileId, MediaResponse mediaResponse) {
                         broadCastCompleteResult(fileId, mediaResponse);
@@ -363,7 +369,9 @@ public class UploadWorker extends Worker {
         return md5;
     }
 
-    public static interface UploadResult {
+    public interface UploadResult {
+        void onUploadStart(int uploadId,UUID cancelUploadId);
+
         void onUploadComplete(int fileId, MediaResponse mediaResponse);
 
         void onUploadProgress(int index, int fileId, int total, int value, int percent);

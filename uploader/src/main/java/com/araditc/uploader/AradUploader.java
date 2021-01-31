@@ -3,6 +3,8 @@ package com.araditc.uploader;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.work.WorkManager;
+
 import com.araditc.uploader.constants.Phrase;
 import com.araditc.uploader.constants.UploadHistoryTypes;
 import com.araditc.uploader.data.api.ApiClient;
@@ -15,6 +17,7 @@ import com.araditc.uploader.struct.UploadHistoryStruct;
 import com.araditc.uploader.struct.UploadStruct;
 
 import java.util.List;
+import java.util.UUID;
 
 public class AradUploader {
     private UploadDAO uploadDAO;
@@ -23,7 +26,6 @@ public class AradUploader {
 
     private AradUploader() {
         uploadDAO = new UploadDAO();
-
     }
 
     public static AradUploader newInstance() {
@@ -112,5 +114,9 @@ public class AradUploader {
     public static void unRegisterProgressUploadListener() {
         UploadService.unRegisterProgressUploadListener();
 
+    }
+
+    public static void cancelNotification(UUID cancelId) {
+        WorkManager.getInstance().cancelWorkById(cancelId);
     }
 }

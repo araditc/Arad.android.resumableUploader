@@ -1,5 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+
     repositories {
         google()
         jcenter()
@@ -9,6 +10,7 @@ buildscript {
             url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
     }
+
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.2"
         classpath "io.realm:realm-gradle-plugin:10.3.0"
