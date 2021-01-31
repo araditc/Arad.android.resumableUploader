@@ -68,6 +68,9 @@ public class UploadWorker extends Worker {
 
     @Override
     public void onStopped() {
+        uploadHistoryModel=null;
+        uploadModel=null;
+
         super.onStopped();
     }
 
@@ -161,11 +164,6 @@ public class UploadWorker extends Worker {
             if (response != null && response.isSuccessful()) {
                 UploadResult listener = new UploadResult() {
                     @Override
-                    public void onUploadStart(int uploadId, UUID cancelUploadId) {
-
-                    }
-
-                    @Override
                     public void onUploadComplete(int fileId, MediaResponse mediaResponse) {
                         broadCastCompleteResult(fileId, mediaResponse);
                     }
@@ -186,6 +184,7 @@ public class UploadWorker extends Worker {
                         broadCastFailResult(message);
                     }
                 };
+
                 uploadHistoryModel.updateUploadHistory(getInputData().getInt(FILE_ID, -1) + ""
                         , UploadHistoryTypes.IS_COMPLETED, new UploadHistoryDAO.TransActionResult() {
                             @Override
@@ -370,8 +369,6 @@ public class UploadWorker extends Worker {
     }
 
     public interface UploadResult {
-        void onUploadStart(int uploadId,UUID cancelUploadId);
-
         void onUploadComplete(int fileId, MediaResponse mediaResponse);
 
         void onUploadProgress(int index, int fileId, int total, int value, int percent);

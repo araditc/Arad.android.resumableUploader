@@ -116,7 +116,7 @@ public class AradUploader {
 
     }
 
-    public static void cancelNotification(UUID cancelId) {
-        WorkManager.getInstance().cancelWorkById(cancelId);
+    public static void cancelNotification(int uploadId) {
+        UploadService.cancelUpload(uploadId);
     }
 }

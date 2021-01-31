@@ -25,6 +25,7 @@ import com.araditc.uploader.notificaiton.NotificationBuilder;
 import com.araditc.uploader.struct.UploadHistoryStruct;
 import com.araditc.uploader.struct.responseStruct.MediaResponse;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import static androidx.work.WorkInfo.State.FAILED;
@@ -60,6 +61,7 @@ public class UploadService extends IntentService {
     public static final String FILE_PATH_KEY = "file_path";
     public static final String TYPE_KEY = "type";
     public static final String FAILED_CHUNK_KEY = "fail_chunk_sequence_number";
+    private static HashMap<Integer, UUID> workerIds = new HashMap<>();
 
     @Override
     public void onCreate() {
@@ -74,12 +76,6 @@ public class UploadService extends IntentService {
         builder = new Data.Builder();
 
         uploadListener = new UploadWorker.UploadResult() {
-
-
-            @Override
-            public void onUploadStart(int uploadId, UUID cancelUploadId) {
-
-            }
 
             @Override
             public void onUploadComplete(int fileId, MediaResponse mediaResponse) {
@@ -132,7 +128,8 @@ public class UploadService extends IntentService {
                 null);
 
         UUID cancelUploadId = prepareChunkUpload(startId, failedChunk, uploadId, intent.getStringExtra(TOKEN_KEY));
-        progressUploadListener.onUploadStart(uploadId,cancelUploadId);
+
+        workerIds.put(uploadId, cancelUploadId);
 
         return START_STICKY;
     }
@@ -253,4 +250,11 @@ public class UploadService extends IntentService {
 
         UploadWorker.removeUploadResultListener(uploadListener);
     }
+
+
+    public static void cancelUpload(int uploadId) {
+        if (workerIds.get(uploadId) != null)
+            WorkManager.getInstance().cancelWorkById(workerIds.get(uploadId));
+    }
+
 }
