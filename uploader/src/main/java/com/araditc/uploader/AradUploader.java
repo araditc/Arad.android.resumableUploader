@@ -59,6 +59,8 @@ public class AradUploader {
         uploadHistoryModel.findHistoryByUploadId(uploadId + "", new UploadHistoryDAO.TransActionResult() {
             @Override
             public void onSuccess(UploadHistoryStruct uploadHistoryStruct) {
+                if (uploadHistoryStruct.getStatus() == UploadHistoryTypes.IN_PROGRESS) return;
+
                 if (uploadHistoryStruct.getStatus() == UploadHistoryTypes.IS_COMPLETED) {
                     startUploadService();
                 } else {

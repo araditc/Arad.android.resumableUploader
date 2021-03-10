@@ -38,6 +38,11 @@ public class UploadHistoryModel implements UploadHistoryContract.Model {
         uploadHistoryDAO.update(fileId, status, transActionListResult);
     }
 
+  @Override
+    public void delete(String fileId) {
+        uploadHistoryDAO.delete(fileId,null);
+    }
+
     @Override
     public void findHistoryByUploadId(String fileId,
                                       UploadHistoryDAO.TransActionResult transActionListResult) {

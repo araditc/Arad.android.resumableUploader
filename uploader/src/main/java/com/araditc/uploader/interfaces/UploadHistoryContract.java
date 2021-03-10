@@ -22,5 +22,7 @@ public interface UploadHistoryContract {
         List<UploadHistoryStruct> fetchAllHistory();
 
         MutableLiveData<List<UploadHistoryStruct>> getUploadHistoryMutableLiveData();
+
+        void delete(String fileId);
     }
 }

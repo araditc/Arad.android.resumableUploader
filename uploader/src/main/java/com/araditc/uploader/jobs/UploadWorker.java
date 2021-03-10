@@ -144,8 +144,7 @@ public class UploadWorker extends Worker {
                         ImageUtils.getTypePath(filePath));
 
                 if (uploadChunkPart == null || !uploadChunkPart.isSuccessful()) {
-                    uploadHistoryModel.updateUploadHistory(getInputData().getInt(FILE_ID, -1) + ""
-                            , UploadHistoryTypes.NOT_COMPLETED, null);
+                    uploadHistoryModel.delete(getInputData().getInt(FILE_ID, -1) + "");
 
                     return Result.failure();
 
@@ -223,9 +222,11 @@ public class UploadWorker extends Worker {
 
             } else {
 
-                uploadHistoryModel.updateUploadHistory(getInputData().getInt(FILE_ID, -1) + ""
-                        , UploadHistoryTypes.NOT_COMPLETED, null);
+//                uploadHistoryModel.updateUploadHistory(getInputData().getInt(FILE_ID, -1) + ""
+//                        , UploadHistoryTypes.NOT_COMPLETED, null);
 
+                int anInt = getInputData().getInt(FILE_ID, -1);
+                uploadHistoryModel.delete(getInputData().getInt(FILE_ID, -1) + "");
                 broadCastFailResult("");
 
                 return Result.failure();

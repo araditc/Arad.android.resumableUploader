@@ -72,24 +72,19 @@ public class UploadHistoryDAO {
         });
     }
 
-    public void delete(UploadStruct uploadStruct, TransActionResult transActionResult) {
+    public void delete(String fileId, TransActionResult transActionResult) {
 
-        realm.executeTransactionAsync(realm -> {
+        realm.executeTransaction(realm -> {
             UploadHistoryDbStruct uploadHistoryDbStruct = realm.where(UploadHistoryDbStruct.class)
-                    .equalTo(ID_COLUMN, uploadStruct.getId()).findFirst();
+                    .equalTo(FILE_ID_COLUMN, fileId).findFirst();
 
             uploadHistoryDbStruct.deleteFromRealm();
-        }, () -> {
 
             if (transActionResult == null) return;
 
             transActionResult.onSuccess(uploadHistoryStruct);
             syncMutableList();
 
-        }, error -> {
-            if (transActionResult == null) return;
-
-            transActionResult.onError(error);
         });
     }
 
