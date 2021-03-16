@@ -93,22 +93,22 @@ public class UploadHistoryDAO {
             UploadHistoryDbStruct uploadHistoryDbStruct = realm.where(UploadHistoryDbStruct.class)
                     .equalTo(FILE_ID_COLUMN, fileId).findFirst();
 
-            if (uploadHistoryDbStruct == null) {
+            if (uploadHistoryDbStruct != null) {
+
+                uploadHistoryDbStruct.setFileId(fileId);
+                uploadHistoryDbStruct.setStatus(status);
+
+                uploadHistoryStruct = new UploadHistoryStruct();
+                uploadHistoryStruct.convert(uploadHistoryDbStruct);
+
+                syncMutableList();
+
+                if (transActionResult == null) return;
+
+                transActionResult.onSuccess(uploadHistoryStruct);
+            }else {
                 transActionResult.onError(null);
-                return;
             }
-
-            uploadHistoryDbStruct.setFileId(fileId);
-            uploadHistoryDbStruct.setStatus(status);
-
-            uploadHistoryStruct = new UploadHistoryStruct();
-            uploadHistoryStruct.convert(uploadHistoryDbStruct);
-
-            syncMutableList();
-
-            if (transActionResult == null) return;
-
-            transActionResult.onSuccess(uploadHistoryStruct);
 
         });
     }
@@ -128,6 +128,8 @@ public class UploadHistoryDAO {
             transActionResult.onSuccess(uploadHistoryStruct);
 
         }, error -> {
+            close();
+
             if (transActionResult == null) return;
 
             transActionResult.onError(error);

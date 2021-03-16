@@ -181,16 +181,18 @@ public class UploadService extends IntentService {
 
                             @Override
                             public void onError(Throwable error) {
-                                if (isUploadShouldStop()) {
-                                    stopService(intent);
-                                }
 
-                                uploadHistoryModel.saveUploadHistory(uploadId + "",
-                                        0,
-                                        UploadHistoryTypes.NOT_COMPLETED,
-                                        null);
                             }
                         });
+
+                if (isUploadShouldStop()) {
+                    stopService(intent);
+                }
+
+                uploadHistoryModel.saveUploadHistory(uploadId + "",
+                        0,
+                        UploadHistoryTypes.NOT_COMPLETED,
+                        null);
 
                 progressUploadListener.onUploadFailed("");
 
