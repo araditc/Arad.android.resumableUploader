@@ -93,6 +93,11 @@ public class UploadHistoryDAO {
             UploadHistoryDbStruct uploadHistoryDbStruct = realm.where(UploadHistoryDbStruct.class)
                     .equalTo(FILE_ID_COLUMN, fileId).findFirst();
 
+            if (uploadHistoryDbStruct == null) {
+                transActionResult.onError(null);
+                return;
+            }
+
             uploadHistoryDbStruct.setFileId(fileId);
             uploadHistoryDbStruct.setStatus(status);
 
