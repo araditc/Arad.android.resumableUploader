@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.araditc.uploader.AppConfig;
 import com.araditc.uploader.struct.UploadHistoryDbStruct;
 import com.araditc.uploader.struct.UploadHistoryStruct;
-import com.araditc.uploader.struct.UploadStruct;
 import com.araditc.uploader.utils.AppUtil;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class UploadHistoryDAO {
     private final String STATUS_COLUMN = "status";
     private UploadHistoryStruct uploadHistoryStruct;
     List<UploadHistoryStruct> uploadStructList;
-    private static final MutableLiveData<List<UploadHistoryStruct>> uploadHistoryMutableLiveData=new MutableLiveData<>();
+    private static final MutableLiveData<List<UploadHistoryStruct>> uploadHistoryMutableLiveData = new MutableLiveData<>();
 
     public UploadHistoryDAO() {
         AppConfig.newInstance().configRealm(AppConfig.application);
@@ -30,7 +29,7 @@ public class UploadHistoryDAO {
 
     private void syncMutableList() {
         List<UploadHistoryStruct> uploadHistoryStructList = UploadHistoryStruct.convert(findAll());
-        AppUtil.runOnUIThread(() -> uploadHistoryMutableLiveData.setValue(uploadHistoryStructList),0);
+        AppUtil.runOnUIThread(() -> uploadHistoryMutableLiveData.setValue(uploadHistoryStructList), 0);
     }
 
     public void save(UploadHistoryDbStruct uploadHistoryDbStruct, TransActionResult transActionResult) {
@@ -106,8 +105,10 @@ public class UploadHistoryDAO {
                 if (transActionResult == null) return;
 
                 transActionResult.onSuccess(uploadHistoryStruct);
-            }else {
-                transActionResult.onError(null);
+            } else {
+
+                if (transActionResult != null)
+                    transActionResult.onError(null);
             }
 
         });
